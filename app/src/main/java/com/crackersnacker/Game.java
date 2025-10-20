@@ -4,16 +4,16 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-public class Game extends JPanel implements IUpdatable{
+public class Game extends JPanel implements IUpdatable {
     int x = 0;
     int y = 0;
-    int width;
-    int height;
 
-    public Game(int width, int height) {
+    public Game(KeyboardInput input) { this(input, 1200, 800); }
+
+    public Game(KeyboardInput input, int width, int height) {
         super();
-        this.width = width;
-        this.height = height;
+        this.addKeyListener(input);
+        this.setSize(width, height);
     }
 
     @Override

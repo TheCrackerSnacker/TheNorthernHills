@@ -3,7 +3,6 @@
  */
 package com.crackersnacker;
 
-import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
@@ -19,8 +18,9 @@ public class App {
 
     public App() {
         this.window = createGameWindow();
-        this.game = new Game(1200, 800);
+        this.game = new Game(new KeyboardInput());
         window.add(game);
+        window.addKeyListener(new KeyboardInput());
         window.setVisible(true);
         game.setUpObject();
     }
