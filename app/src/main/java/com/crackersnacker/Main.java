@@ -1,8 +1,37 @@
 package com.crackersnacker;
 
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 public class Main {
-    public static void main(String[] args) {
-        App app = new App();
-        app.loop();
-    }
+
+	long window;
+
+	public void run() {
+		if (!glfwInit()) {
+			System.err.println("Error: GLFW could not be initialized!");
+			return;
+		}
+
+		window = glfwCreateWindow(800, 600, "GLFW Window", NULL, NULL);
+		if (window == NULL) {
+			System.err.println("Failed to create GLFW window.");
+			glfwTerminate();
+			return;
+		}
+
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+
+		while (!glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+		}
+
+		glfwTerminate();
+	}
+
+	public static void main(String[] args) {
+		new Main().run();
+	}
+
 }
