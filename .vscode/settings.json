@@ -3,4 +3,5 @@
     "editor.suggest.showSnippets": false,
     "editor.suggest.filterGraceful": true,
     "java.completion.guessMethodArguments": "off",
+    "java.jdt.ls.java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.11.10-hotspot"
 }
