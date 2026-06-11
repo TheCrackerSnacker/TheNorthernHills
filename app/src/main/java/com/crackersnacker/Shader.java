@@ -1,7 +1,6 @@
 package com.crackersnacker;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,14 +35,13 @@ public class Shader {
             src = loadShaderSource(filepath);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new Error("Failed to load shader at "+filepath);
+            throw new Error("Failed to load shader at "+filepath, e);
         }
         return compileShader(type, src);
     }
 
     private String loadShaderSource(String filepath) throws IOException {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("shaders/" + filepath);
+        InputStream is = Shader.class.getClassLoader().getResourceAsStream("shaders/" + filepath);
         return readFromInputStream(is);
     }
 
@@ -68,7 +66,7 @@ public class Shader {
 
         if (success[0] == 0) {
             String infoLog = glGetShaderInfoLog(shader);
-            System.out.println("SHADER COMPILATION FAILURE. ERROR CODE " + success[0] + ":");
+            System.out.println("SHADER COMPILATION FAILURE:");
             System.out.println(infoLog);
 
             glDeleteShader(shader);
