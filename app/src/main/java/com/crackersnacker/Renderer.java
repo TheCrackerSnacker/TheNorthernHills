@@ -13,44 +13,21 @@ public class Renderer {
         0.35f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
         -0.35f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f
     };
-    int VBO; // Vertex Buffer Object
-
-    String vsSrc = "#version 330 core\n"
-    + "layout (location = 0) in vec3 aPos;\n"
-    + "layout (location = 1) in vec3 aColor;\n"
-    + "out vec3 vertColor;\n"
-    + "void main()\n"
-    + "{\n"
-    + "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    + "    vertColor = aColor;\n"
-    + "}\0";
-
-    int vertexShader;
-
-    String fsSrc = "#version 330 core\n"
-    + "out vec4 FragColor;\n"
-    + "in vec3 vertColor;\n"
-    + "void main()\n"
-    + "{\n"
-    + "    FragColor = vec4(vertColor, 1.0f);\n"
-    + "}\0";
-
-    int fragmentShader;
-    int shaderProgram;
+    private int VBO; // Vertex Buffer Object
 
     final int FLOAT_SIZE = 4;
 
-    int VAO; // Vertex Array Object
+    private int VAO; // Vertex Array Object
 
-    int EBO; // Element Buffer Object
+    private int EBO; // Element Buffer Object
 
-    int[] indices = {
+    private int[] indices = {
         0, 1, 2,
         0, 2, 3
     };
 
-    Shader shader;
-    Texture texture;
+    private Shader shader;
+    private Texture texture;
 
     public Renderer() {
         GL.createCapabilities();
@@ -75,9 +52,9 @@ public class Renderer {
 
         glBindVertexArray(0);
 
-        shader = new Shader("tex.vs", "tex.fs");
+        shader = new Shader("tex.vert", "tex.frag");
         try {
-            texture = new Texture("matt.jpg");
+            texture = new Texture("matt.png");
         } catch (IOException e) {
             throw new IOError(e);
         }

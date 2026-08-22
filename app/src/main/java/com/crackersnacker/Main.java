@@ -3,8 +3,6 @@ package com.crackersnacker;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import org.lwjgl.glfw.GLFW;
-
 public class Main {
 
 	long window;
@@ -25,7 +23,7 @@ public class Main {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
-		GLFW.glfwMakeContextCurrent(window);
+		glfwMakeContextCurrent(window);
 		Renderer renderer = new Renderer();
 		
 		while (!glfwWindowShouldClose(window)) {
