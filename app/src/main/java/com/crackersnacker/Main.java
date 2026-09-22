@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL;
 
+import com.crackersnacker.entity.Entity;
+
 public class Main {
 
 	long window;
@@ -57,6 +59,11 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		new Main().run();
+        Entity entity = new Entity();
+        BasicScript bs = new BasicScript();
+        entity.addScript(bs);
+        bs.foo();
+
+        new Main().run();
 	}
 }
