@@ -1,18 +1,13 @@
 package com.crackersnacker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import static org.lwjgl.opengl.GL33.*;
 
 public class Shader {
     int shaderProgram;
 
-    public Shader(String vertexFilepath, String fragmentFilepath) {
-        int vertex = createShader(GL_VERTEX_SHADER, vertexFilepath);
-        int fragment = createShader(GL_FRAGMENT_SHADER, fragmentFilepath);
+    public Shader(String vertexSrc, String fragmentSrc) {
+        int vertex = compileShader(GL_VERTEX_SHADER, vertexSrc);
+        int fragment = compileShader(GL_FRAGMENT_SHADER, fragmentSrc);
         
         int program = glCreateProgram();
         glAttachShader(program, vertex);
@@ -29,35 +24,9 @@ public class Shader {
         glUseProgram(shaderProgram);
     }
 
-    private int createShader(int type, String filepath) {
-        String src = "";
-        try {
-            src = loadShaderSource(filepath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new Error("Failed to load shader at "+filepath, e);
-        }
-        return compileShader(type, src);
-    }
-
-    private String loadShaderSource(String filepath) throws IOException {
-        InputStream is = Shader.class.getClassLoader().getResourceAsStream("shaders/" + filepath);
-        return readFromInputStream(is);
-    }
-
-    private String readFromInputStream(InputStream inputStream) throws IOException {
-        StringBuilder resultStringBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append("\n");
-            }
-        }
-        return resultStringBuilder.toString();
-    }
-
     private int compileShader(int type, String source) {
         int shader = glCreateShader(type);
+
         glShaderSource(shader, source);
         glCompileShader(shader);
 

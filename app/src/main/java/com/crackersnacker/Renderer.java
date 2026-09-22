@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL;
 
+import com.crackersnacker.ShaderManager;
+
 public class Renderer {
     float[] vertexBuffer = { // x, y, z, r, g, b, s, t
         -0.35f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -27,6 +29,7 @@ public class Renderer {
     };
 
     private Shader shader;
+    private ShaderManager shaderManager;
     private Texture texture;
 
     public Renderer() {
@@ -51,8 +54,10 @@ public class Renderer {
         glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);
+        
+        shaderManager = new ShaderManager();
 
-        shader = new Shader("tex.vert", "tex.frag");
+        shader = shaderManager.get(ShaderManager.ShaderId.Tex);
         try {
             texture = new Texture("matt.png");
         } catch (IOException e) {

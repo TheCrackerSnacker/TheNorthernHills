@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 
+import org.lwjgl.opengl.GL;
 import org.lwjgl.stb.STBImage;
 
 public class Texture {
@@ -37,6 +38,7 @@ public class Texture {
         width = widthRef[0];
         height = heightRef[0];
 
+        GL.createCapabilities();
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
