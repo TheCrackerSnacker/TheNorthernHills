@@ -2,7 +2,7 @@ package com.crackersnacker.entity;
 
 import java.util.Optional;
 
-public abstract class Script {
+public class Script {
     private Entity entity;
     private boolean enabled;
 
@@ -37,9 +37,9 @@ public abstract class Script {
         return entity.getOptionalScript(type);
     }
     
-    protected void init() {};
-    protected void update() {};
-    protected void onEnable() {};
-    protected void onDisable() {};
-    protected void onDestroy() {};
+    protected void init() {}
+    protected void update() {}
+    protected void onEnable() {}
+    protected void onDisable() {}
+    protected void onDestroy() {}
 }
