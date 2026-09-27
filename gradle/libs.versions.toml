@@ -2,9 +2,9 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-guava = "33.3.1-jre"
 junit-jupiter = "5.11.3"
+mockito = "5.23.0"
 
 [libraries]
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }

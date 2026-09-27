@@ -12,6 +12,10 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    mockitoAgent
+}
+
 dependencies {
 	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
@@ -27,9 +31,18 @@ dependencies {
 
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
-    testImplementation "org.mockito:mockito-core:5.23.0"
+    testImplementation(libs.mockito)
+    mockitoAgent(libs.mockito) {
+        transitive = false
+    }
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks {
+    test {
+        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+    }
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class Script {
     private Entity entity;
-    private boolean enabled;
+    private boolean enabled = true;
 
     public void setEnabled(boolean enabled) {
         boolean prevEnabled = this.enabled;
