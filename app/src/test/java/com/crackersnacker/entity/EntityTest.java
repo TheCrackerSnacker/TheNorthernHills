@@ -32,7 +32,7 @@ public class EntityTest {
 
     @Test
     void throwsOnMissingRequiredScript() {
-        assertThrows(IllegalStateException.class, () -> entity.getScript(Script.class));
+        assertThrows(IllegalArgumentException.class, () -> entity.getScript(Script.class));
     }
 
     @Test

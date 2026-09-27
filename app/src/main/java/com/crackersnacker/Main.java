@@ -59,11 +59,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-        Entity entity = new Entity();
-        BasicScript bs = new BasicScript();
-        entity.addScript(bs);
-        bs.foo();
-
         new Main().run();
 	}
 }

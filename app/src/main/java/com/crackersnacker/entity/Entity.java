@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Optional;
 
 public final class Entity {
-    float x, y;
-    List<Script> scripts;
-    boolean initialized = false;
+    private final List<Script> scripts;
 
-    public Entity() {
+    private float x, y;
+    private boolean initialized = false;
+
+    Entity() {
         scripts = new ArrayList<Script>();
     }
 
-    public void addScript(Script script) {
+    void addScript(Script script) {
         if (initialized) {
-            throw new IllegalStateException("Cannot add same Script to initialized Entity.");
+            throw new IllegalStateException("Cannot add Script to initialized Entity.");
         }
         if (script.getEntity() != null) {
             throw new IllegalStateException("Cannot add same Script to multiple Entities.");
@@ -31,7 +32,7 @@ public final class Entity {
                 return (T)script;
             }
         }
-        throw new IllegalStateException("Required script of type '"+type.getName()+"' is not present on this Entity.");
+        throw new IllegalArgumentException("Required script of type '"+type.getName()+"' is not present on this Entity.");
     }
 
     @SuppressWarnings("unchecked")
@@ -44,7 +45,7 @@ public final class Entity {
         return Optional.empty();
     }
 
-    public void init() {
+    void init() {
         if (initialized) {
             throw new IllegalStateException("Cannot initialize an entity that has already been initialized.");
         }
@@ -60,5 +61,21 @@ public final class Entity {
                 script.update();
             }
         }
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float newX) {
+        x = newX;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float newY) {
+        y = newY;
     }
 }
