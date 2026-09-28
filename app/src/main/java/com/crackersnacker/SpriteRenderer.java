@@ -1,5 +1,6 @@
 package com.crackersnacker;
 
+import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 import static org.lwjgl.opengl.GL33.GL_FLOAT;
 import static org.lwjgl.opengl.GL33.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL33.GL_ELEMENT_ARRAY_BUFFER;
@@ -18,79 +19,91 @@ import static org.lwjgl.opengl.GL33.glGenVertexArrays;
 
 import java.nio.FloatBuffer;
 
+import com.crackersnacker.entity.Script;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 
-public class SpriteRenderer {
+public class SpriteRenderer extends Script implements Renderable {
 
-    private float x, y;
     private float rotation;
     private Texture tex;
-    private FloatBuffer matBuf;
-    private FloatBuffer viewMatBuf;
-    private FloatBuffer projMatBuf;
     private Shader shader;
+    private final Matrix4f modelMat;
+    private final FloatBuffer matBuf;
+    private final Renderer renderer;
 
-    private int VBO; // Vertex Buffer Object
-    private final int FLOAT_SIZE = 4;
     private int VAO; // Vertex Array Object
-    private int EBO; // Element Buffer Object
+
+    private float width;
+    private float height;
 
     private final int[] indices = {
         0, 1, 2,
         0, 2, 3
     };
     
-    public SpriteRenderer(Texture tex, Shader shader, float width, float height) {
+    public SpriteRenderer(Texture tex, Shader shader, Renderer renderer, float width, float height) {
         matBuf = BufferUtils.createFloatBuffer(16);
-        viewMatBuf = BufferUtils.createFloatBuffer(16);
-        projMatBuf = BufferUtils.createFloatBuffer(16);
+        modelMat = new Matrix4f();
         this.tex = tex;
         this.shader = shader;
-        setupRenderer(width, height);
-        x = 0.5f;
-        y = 0.5f;
+        this.width = width;
+        this.height = height;
+        this.renderer = renderer;
         rotation = 0;// (float) (Math.PI / 2);
     }
 
-    private void setupRenderer(float width, float height) {
+    @Override
+    public void init() {
+        setupRenderer();
+        renderer.registerElement(this);
+    }
+
+    private void setupRenderer() {
         GL.createCapabilities();
 
         VAO = glGenVertexArrays();
         glBindVertexArray(VAO);
 
-        VBO = glGenBuffers();
+        int VBO = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, createRectVertices(width, height), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, createRectVertices(), GL_STATIC_DRAW);
 
-        EBO = glGenBuffers();
+        int EBO = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 8 * FLOAT_SIZE, 0);
+        int FLOAT_SIZE = 4;
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * FLOAT_SIZE, 0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 8 * FLOAT_SIZE, 3 * FLOAT_SIZE);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * FLOAT_SIZE, 3 * FLOAT_SIZE);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 2, GL_FLOAT, false, 8 * FLOAT_SIZE, 6 * FLOAT_SIZE);
-        glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);
     }
 
-    private float[] createRectVertices(float width, float height) {
-        float[] vertexBuffer = { // x, y, z, r, g, b, s, t
-            -width/2f, -height/2f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-            width/2f,  -height/2f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-            width/2f,  height/2f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-            -width/2f, height/2f,  0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f
+    private float[] createRectVertices() {
+        return new float[]{ // x, y, z, r, g, b, s, t
+            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+            0.5f,  -0.5f, 0.0f, 1.0f, 1.0f,
+            0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f,  0.0f, 0.0f, 0.0f
         };
-        return vertexBuffer;
+    }
+
+    @Override
+    public void onEnable() {
+        renderer.registerElement(this);
+    }
+
+    @Override
+    public void onDisable() {
+        renderer.unregisterElement(this);
     }
 
     public void render() {
-        rotation += 0.001;
-        new Matrix4f().translate(x, y, 0).rotate(rotation, 0, 0, 1).get(matBuf);
+        modelMat.translation(getEntity().getX(), getEntity().getY(), 0).rotate(rotation, 0, 0, 1).scale(width, height, 0).get(matBuf);
 
         glUniformMatrix4fv(0, false, matBuf);
         shader.use();
@@ -98,5 +111,29 @@ public class SpriteRenderer {
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotationRads) {
+        this.rotation = rotationRads;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 }

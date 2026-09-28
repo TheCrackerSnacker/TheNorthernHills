@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL33.*;
 import java.io.IOError;
 import java.io.IOException;
 
+import com.crackersnacker.entity.EntityBuilder;
 import org.lwjgl.opengl.GL;
 
 import com.crackersnacker.entity.Entity;
@@ -43,13 +44,19 @@ public class Main {
             throw new IOError(e);
         }
 
+		Renderer renderer = new Renderer();
+
         Shader shad = shaderManager.get(ShaderManager.ShaderId.Obj);
-		SpriteRenderer renderer = new SpriteRenderer(tex, shad, 0.8f, 1.0f);
-		
+		SpriteRenderer spriteRenderer = new SpriteRenderer(tex, shad, renderer, 0.8f, 1.0f);
+
+		Entity ent1 = new EntityBuilder().withScript(spriteRenderer).withPos(0.5f, 0.5f).getResult();
+
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
             GL.createCapabilities();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			ent1.update();
 			renderer.render();
 
 			glfwSwapBuffers(window);

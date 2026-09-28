@@ -36,7 +36,7 @@ public class Script {
     protected <T extends Script> Optional<T> getOptionalScript(Class<T> type) {
         return entity.getOptionalScript(type);
     }
-    
+
     protected void init() {}
     protected void update() {}
     protected void onEnable() {}
