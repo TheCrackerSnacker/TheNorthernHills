@@ -20,6 +20,8 @@ public class Game {
     }
 
     private void setup() {
+        window = new Window();
+
         Texture tex;
         try {
             tex = new Texture("matt.png");
@@ -28,6 +30,7 @@ public class Game {
         }
 
         shaderManager = new ShaderManager();
+        entityManager = new EntityManager();
         renderer = new Renderer();
 
         Shader shad = shaderManager.get(ShaderManager.ShaderId.Obj);
@@ -38,8 +41,6 @@ public class Game {
                 .withScript(spriteRenderer)
                 .withPos(0.5f, 0.5f)
                 .getResult();
-
-        window = new Window();
     }
 
     public void loop() {
