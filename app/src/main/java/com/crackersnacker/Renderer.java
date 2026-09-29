@@ -1,14 +1,10 @@
 package com.crackersnacker;
-import static org.lwjgl.opengl.GL33.*;
+import org.lwjgl.opengl.GL;
 
-import java.io.IOError;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL;
-
-import com.crackersnacker.ShaderManager;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
     private final List<Renderable> elements;
@@ -18,6 +14,9 @@ public class Renderer {
     }
 
     public void render() {
+        GL.createCapabilities();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
         for (Renderable element : elements) {
             element.render();
         }

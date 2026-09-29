@@ -1,25 +1,29 @@
 package com.crackersnacker.entity;
 
 public class EntityBuilder {
-    private final Entity entity;
+    protected final Entity entity;
     private boolean finalized;
 
-    public EntityBuilder() {
+    EntityBuilder() {
         entity = new Entity();
         finalized = false;
     }
 
     public EntityBuilder withScript(Script script) {
-        if (finalized) throw new IllegalStateException("Cannot add Script. Entity construction has already been finalized.");
+        if (isFinalized()) throw new IllegalStateException("Cannot add Script. Entity construction has already been finalized.");
         entity.addScript(script);
         return this;
     }
 
     public EntityBuilder withPos(float x, float y) {
-        if (finalized) throw new IllegalStateException("Cannot change position. Entity construction has already been finalized.");
+        if (isFinalized()) throw new IllegalStateException("Cannot change position. Entity construction has already been finalized.");
         entity.setX(x);
         entity.setY(y);
         return this;
+    }
+
+    protected boolean isFinalized() {
+        return finalized;
     }
 
     public Entity getResult() {

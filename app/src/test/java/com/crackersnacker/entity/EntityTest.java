@@ -59,9 +59,9 @@ public class EntityTest {
         when(disabledScript.isEnabled()).thenReturn(false);
         entity.addScript(script);
         entity.addScript(disabledScript);
-        entity.update();
-        verify(script, times(1)).update();
-        verify(disabledScript, times(0)).update();
+        entity.update(0.05);
+        verify(script, times(1)).update(0.05);
+        verify(disabledScript, times(0)).update(0.05);
     }
 
     @Test

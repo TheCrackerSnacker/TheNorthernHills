@@ -9,9 +9,11 @@ public final class Entity {
 
     private float x, y;
     private boolean initialized = false;
+    private boolean markedForRemoval = false;
+    private boolean destroyed = false;
 
     Entity() {
-        scripts = new ArrayList<Script>();
+        scripts = new ArrayList<>();
     }
 
     void addScript(Script script) {
@@ -55,10 +57,16 @@ public final class Entity {
         }
     }
 
-    public void update() {
+    void start() {
+        for (Script script : scripts) {
+            script.start();
+        }
+    }
+
+    public void update(double dt) {
         for (Script script : scripts) {
             if (script.isEnabled()) {
-                script.update();
+                script.update(dt);
             }
         }
     }
@@ -77,5 +85,26 @@ public final class Entity {
 
     public void setY(float newY) {
         y = newY;
+    }
+
+    boolean isMarkedForRemoval() {
+        return markedForRemoval;
+    }
+
+    void markForRemoval() {
+        markedForRemoval = true;
+    }
+
+    boolean isDestroyed() {
+        return destroyed;
+    }
+
+    void destroy() {
+        for (Script script : scripts) {
+            script.onDestroy();
+            script.destroy();
+        }
+        scripts.clear();
+        this.destroyed = true;
     }
 }

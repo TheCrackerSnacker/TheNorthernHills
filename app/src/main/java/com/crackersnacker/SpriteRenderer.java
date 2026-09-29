@@ -1,6 +1,5 @@
 package com.crackersnacker;
 
-import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 import static org.lwjgl.opengl.GL33.GL_FLOAT;
 import static org.lwjgl.opengl.GL33.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL33.GL_ELEMENT_ARRAY_BUFFER;

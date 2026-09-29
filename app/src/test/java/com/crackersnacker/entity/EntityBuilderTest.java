@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EntityBuilderTest {
     EntityBuilder builder;
+    EntityManager manager;
 
     @BeforeEach
     void setup() {
+        manager = new EntityManager();
         builder = new EntityBuilder()
                 .withScript(new Script())
                 .withPos(42f, 42f);
