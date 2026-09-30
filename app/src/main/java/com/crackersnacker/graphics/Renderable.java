@@ -1,4 +1,4 @@
-package com.crackersnacker;
+package com.crackersnacker.graphics;
 
 public interface Renderable {
     void render();

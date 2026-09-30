@@ -1,4 +1,4 @@
-package com.crackersnacker.io;
+package com.crackersnacker.resources;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 public class ResourceLoader {
     public static String loadTextResource(String filepath) throws IOException {
         InputStream is = ResourceLoader.class.getClassLoader().getResourceAsStream(filepath);
+        if (is == null) {
+            throw new IOException("Filepath '"+filepath+"' could not be loaded as a resource.");
+        }
         return readFromInputStream(is);
     }
 

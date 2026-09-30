@@ -2,16 +2,29 @@ package com.crackersnacker;
 
 import com.crackersnacker.entity.Entity;
 import com.crackersnacker.entity.EntityManager;
+import com.crackersnacker.graphics.Renderer;
+import com.crackersnacker.graphics.Shader;
+import com.crackersnacker.graphics.SpriteRenderer;
+import com.crackersnacker.graphics.Texture;
+import com.crackersnacker.resources.ResourceManager;
+import com.crackersnacker.resources.Shaders;
 
 import java.io.IOError;
 import java.io.IOException;
 
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 public class Game {
-    Window window;
-    ShaderManager shaderManager;
     EntityManager entityManager;
     Renderer renderer;
     Entity ent1;
+    long window;
 
     private final double UPS;
 
@@ -20,7 +33,7 @@ public class Game {
     }
 
     private void setup() {
-        window = new Window();
+        createWindow();
 
         Texture tex;
         try {
@@ -29,11 +42,12 @@ public class Game {
             throw new IOError(e);
         }
 
-        shaderManager = new ShaderManager();
+        ResourceManager resources = new ResourceManager();
+
         entityManager = new EntityManager();
         renderer = new Renderer();
 
-        Shader shad = shaderManager.get(ShaderManager.ShaderId.Obj);
+        Shader shad = resources.get(Shaders.SPRITE);
         SpriteRenderer spriteRenderer = new SpriteRenderer(tex, shad, renderer, 0.8f, 1.0f);
 
         ent1 = entityManager
@@ -43,27 +57,47 @@ public class Game {
                 .getResult();
     }
 
+    private void createWindow() {
+        if (!glfwInit()) {
+            System.err.println("Error: GLFW could not be initialized!");
+            return;
+        }
+
+        window = glfwCreateWindow(600, 600, "GLFW Window", NULL, NULL);
+        if (window == NULL) {
+            System.err.println("Failed to create GLFW window.");
+            glfwTerminate();
+            return;
+        }
+
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+
+        glfwMakeContextCurrent(window);
+    }
+
     public void loop() {
         setup();
         long timestepNanos = (long)(1e9 / UPS);
         long previousTime = System.nanoTime();
 
-        while (!window.shouldClose()) {
+        while (!glfwWindowShouldClose(window)) {
             if (System.nanoTime() > previousTime + timestepNanos) {
                 long currentTime = System.nanoTime();
                 double deltaTime = (currentTime - previousTime) / 1e9;
-                window.pollEvents();
+                glfwPollEvents();
                 ent1.update(deltaTime);
                 renderer.render();
-                window.refresh();
+                glfwSwapBuffers(window);
                 previousTime = currentTime;
             }
         }
-        window.terminate();
+        glfwTerminate();
         cleanup();
     }
 
     private void cleanup() {
 
     }
+
 }

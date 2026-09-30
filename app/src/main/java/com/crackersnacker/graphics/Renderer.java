@@ -1,4 +1,4 @@
-package com.crackersnacker;
+package com.crackersnacker.graphics;
 import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;

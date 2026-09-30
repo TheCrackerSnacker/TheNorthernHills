@@ -1,4 +1,4 @@
-package com.crackersnacker;
+package com.crackersnacker.graphics;
 
 import static org.lwjgl.opengl.GL33.GL_FLOAT;
 import static org.lwjgl.opengl.GL33.GL_ARRAY_BUFFER;

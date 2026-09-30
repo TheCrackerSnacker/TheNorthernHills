@@ -20,10 +20,11 @@ public class EntityManagerTest {
         Script script = mock(Script.class);
         when(script.isEnabled()).thenReturn(true);
         manager.buildEntity().withScript(script).getResult();
-        manager.update(0.05);
         verify(script, times(1)).init();
+        manager.update(0.05);
+        manager.update(0.05);
         verify(script, times(1)).start();
-        verify(script, times(1)).update(0.05);
+        verify(script, times(2)).update(0.05);
     }
 
     @Test
