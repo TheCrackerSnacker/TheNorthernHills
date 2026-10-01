@@ -1,5 +1,4 @@
 package com.crackersnacker.graphics;
-import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ public class Renderer {
     }
 
     public void render() {
-        GL.createCapabilities();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         for (Renderable element : elements) {

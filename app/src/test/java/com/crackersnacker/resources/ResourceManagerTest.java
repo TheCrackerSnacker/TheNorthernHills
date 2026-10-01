@@ -7,36 +7,41 @@ import static org.mockito.Mockito.*;
 
 public class ResourceManagerTest {
 
-    ResourceManager manager;
+    StringManager manager;
 
     @BeforeEach
     void setup() {
-        manager = new ResourceManager();
+        manager = new StringManager();
     }
 
     @Test
     void loadsResource() {
-        StringEntry entry = new StringEntry("Test");
+        String entry = "Test";
         String resource = manager.get(entry);
 
         assert "Test-loaded".equals(resource);
     }
 
     @Test
-    void loadsResourceOnce() {
-        StringEntry entry = mock(StringEntry.class);
-        when(entry.loadResource()).thenReturn("Test-loaded");
-        manager.get(entry);
-        manager.get(entry);
-
-        verify(entry, times(1)).loadResource();
+    void loadsEachResourceOnce() {
+        manager.get("Test");
+        manager.get("Test");
+        assert manager.getLoadCount() == 1;
+        manager.get("Test2");
+        assert manager.getLoadCount() == 2;
     }
 
-    record StringEntry(String name) implements ResourceManager.Entry<String> {
+    static class StringManager extends ResourceManager<String, String> {
+        private int loadCounter = 0;
 
         @Override
-        public String loadResource() {
-            return name + "-loaded";
+        protected String load(String entry) {
+            loadCounter++;
+            return entry + "-loaded";
+        }
+
+        public int getLoadCount() {
+            return loadCounter;
         }
     }
 }

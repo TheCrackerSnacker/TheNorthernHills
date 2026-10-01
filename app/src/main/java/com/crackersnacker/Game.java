@@ -2,15 +2,9 @@ package com.crackersnacker;
 
 import com.crackersnacker.entity.Entity;
 import com.crackersnacker.entity.EntityManager;
-import com.crackersnacker.graphics.Renderer;
-import com.crackersnacker.graphics.Shader;
-import com.crackersnacker.graphics.SpriteRenderer;
-import com.crackersnacker.graphics.Texture;
-import com.crackersnacker.resources.ResourceManager;
+import com.crackersnacker.graphics.*;
 import com.crackersnacker.resources.Shaders;
-
-import java.io.IOError;
-import java.io.IOException;
+import com.crackersnacker.resources.Textures;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
@@ -21,6 +15,8 @@ import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Game {
+    Shaders shaders;
+    Textures textures;
     EntityManager entityManager;
     Renderer renderer;
     Entity ent1;
@@ -33,21 +29,13 @@ public class Game {
     }
 
     private void setup() {
-        createWindow();
+        window = Window.create("The Northern Hills", 600, 600, true, true);
 
-        Texture tex;
-        try {
-            tex = new Texture("matt.png");
-        } catch (IOException e) {
-            throw new IOError(e);
-        }
-
-        ResourceManager resources = new ResourceManager();
-
+        Texture tex = textures.get("matt.png");
         entityManager = new EntityManager();
         renderer = new Renderer();
 
-        Shader shad = resources.get(Shaders.SPRITE);
+        Shader shad = shaders.get(Shaders.SPRITE);
         SpriteRenderer spriteRenderer = new SpriteRenderer(tex, shad, renderer, 0.8f, 1.0f);
 
         ent1 = entityManager
@@ -57,23 +45,22 @@ public class Game {
                 .getResult();
     }
 
-    private void createWindow() {
+    private long createWindow() {
         if (!glfwInit()) {
-            System.err.println("Error: GLFW could not be initialized!");
-            return;
+            throw new RuntimeException("GLFW could not be initialized.");
         }
 
-        window = glfwCreateWindow(600, 600, "GLFW Window", NULL, NULL);
+        long window = glfwCreateWindow(600, 600, "GLFW Window", NULL, NULL);
         if (window == NULL) {
-            System.err.println("Failed to create GLFW window.");
             glfwTerminate();
-            return;
+            throw new RuntimeException("Failed to create GLFW window.");
         }
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
         glfwMakeContextCurrent(window);
+        return window;
     }
 
     public void loop() {

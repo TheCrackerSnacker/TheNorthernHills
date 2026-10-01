@@ -40,7 +40,7 @@ public class Shader {
 
             glDeleteShader(shader);
 
-            throw new RuntimeException("Shader compilation failed.");
+            throw new ShaderCompilationException("Shader compilation failed.");
         }
 
         return shader;
@@ -60,7 +60,7 @@ public class Shader {
 
             glDeleteProgram(shaderProgram);
 
-            throw new RuntimeException("Shader program validation failed.");
+            throw new ShaderCompilationException("Shader program validation failed.");
         }
     }
 }
