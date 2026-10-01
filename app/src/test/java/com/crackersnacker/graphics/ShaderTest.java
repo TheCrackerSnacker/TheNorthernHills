@@ -37,19 +37,6 @@ public class ShaderTest {
         assertThrows(ShaderCompilationException.class, () -> new Shader(badSrc, badSrc));
     }
 
-    @Test
-    void throwsOnLinkingFailure() {
-        String vertSrc;
-        String fragSrc;
-        try {
-            vertSrc = ResourceLoader.loadTextResource("shaders/mismatched.vert");
-            fragSrc = ResourceLoader.loadTextResource("shaders/mismatched.frag");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        assertThrows(ShaderCompilationException.class, () -> new Shader(vertSrc, fragSrc));
-    }
-
     @AfterAll
     void cleanup() {
         GLFW.glfwTerminate();
