@@ -7,7 +7,7 @@ import java.util.Optional;
 public final class Entity {
     private final List<Script> scripts;
 
-    private float x, y;
+    private double x, y;
     private boolean initialized = false;
     private boolean markedForRemoval = false;
     private boolean destroyed = false;
@@ -71,19 +71,19 @@ public final class Entity {
         }
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float newX) {
+    public void setX(double newX) {
         x = newX;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float newY) {
+    public void setY(double newY) {
         y = newY;
     }
 

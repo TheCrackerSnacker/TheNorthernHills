@@ -102,7 +102,7 @@ public class SpriteRenderer extends Script implements Renderable {
     }
 
     public void render() {
-        modelMat.translation(getEntity().getX(), getEntity().getY(), 0).rotate(rotation, 0, 0, 1).scale(width, height, 0).get(matBuf);
+        modelMat.translation((float)getEntity().getX(), (float)getEntity().getY(), 0).rotate(rotation, 0, 0, 1).scale(width, height, 0).get(matBuf);
 
         glUniformMatrix4fv(0, false, matBuf);
         shader.use();
